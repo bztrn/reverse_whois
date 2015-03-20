@@ -5,8 +5,8 @@
   %body
     Reverse whois lookup
 
-    %form{ action: "/", method: "get" }
-      %input{ type: "text", name: "q" }
+    %form{ action: "/whois", method: "post" }
+      %textarea{ name: "domains" }
       %input{ type: "submit", value: "Search"}
 
 -# :)

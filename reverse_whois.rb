@@ -1,6 +1,7 @@
-require_relative "../config/env"
+require_relative "config/env"
+require 'json'
 
-class ReverseWhois
+class ReverseWhois < Sinatra::Base
   get "/" do
     haml :index
   end
@@ -9,9 +10,13 @@ class ReverseWhois
     domains = Parser.parse params[:domains]
 
     domains.each do |domain|
-      WhoisJob.async.perform
+      WhoisJob.new.async.perform domain
     end
 
     "done!"
+  end
+
+  get "/domains" do
+    Query.all.to_json
   end
 end
