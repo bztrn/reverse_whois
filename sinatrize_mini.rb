@@ -13,21 +13,21 @@ class Sinatrize
     dir "views"
     dir "public"
 
-    file "env.rb", <<HERE.gsub('^\s+', '')
+    file "config/env.rb", <<-STR.gsub(/^\s+/, '')
       require 'bundler/setup'
       Bundler.require :default
-    HERE
+    STR
 
-    file "Gemfile", <<HERE.gsub('^\s+', '')
+    file "Gemfile", <<-STR.gsub(/^\s+/, '')
       source "http://rubygems.org"
 
       gem "sinatra", github: "sinatra/sinatra"
 
       gem 'sucker_punch', '~> 1.0'
 
-    HERE
+    STR
 
-    file "app.rb", <<HERE.gsub('^\s+', '')
+    file "app.rb", <<-STR.gsub(/^ {6}/, '')
       require_relative "../config/env"
 
       class ReverseWhois
@@ -36,22 +36,27 @@ class Sinatrize
         end
       end
 
-    HERE
+    STR
 
-    file "config.ru", <<HERE.gsub('^\s+', '')
+    file "config.ru", <<-STR.gsub(/^\s+/, '')
       require "./reverse_whois"
 
       run ReverseWhois
 
-    HERE
+    STR
 
-    file "Readme.md", <<HERE.gsub('^\s+', '')
+    file "Readme.md", <<-STR.gsub(/^\s+/, '')
       # App.rb
 
       generated with makevoid/sinatrize_mini.rb
-    HERE
+    STR
 
-    file "views/index.haml", <<HERE.gsub('^\s+', '')
+    file ".gitignore", <<-STR.gsub(/^\s+/, '')
+      .sass-cache
+      .DS_Store
+    STR
+
+    file "views/index.haml", <<-STR.gsub(/^ {6}/, '')
       %html
         %head
           %title Reverse whois lookup
@@ -63,11 +68,8 @@ class Sinatrize
             %input{ type: "text", name: "q" }
             %input{ type: "submit", value: "Search"}
 
-    HERE
-
-    file "Gemfile", <<HERE.gsub('^\s+', '')
-
-    HERE
+      -# :)
+    STR
 
     generate_files
   end
@@ -75,9 +77,9 @@ class Sinatrize
   private
 
   def generate_files
-    @files.each do |content|
-      File.open(file, "w") do |f|
-        f.write content
+    @files.each do |file|
+      File.open(file[:name], "w") do |f|
+        f.write file[:content]
       end
     end
   end
