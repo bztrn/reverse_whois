@@ -1,7 +1,9 @@
 class WhoisJob
   include SuckerPunch::Job
 
-  def perform(event)
-    Whoiser.new(event).whois
+  def perform(domain)
+    Whoiser.whois domain
   end
 end
+
+# WhoisJob.async.perform
